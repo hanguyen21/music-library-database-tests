@@ -14,49 +14,75 @@ class Application < Sinatra::Base
     also_reload 'lib/artist_repository'
   end
 
-
-
   get '/albums' do 
     repo = AlbumRepository.new 
-    albums = repo.all
+    @albums = repo.all
 
-    response = albums.map do |album|
-      album.title
-    end.join(',')
-
-    return response
+    return erb(:albums)
   end
 
-  post '/albums' do 
+  get '/albums/:id' do 
     repo = AlbumRepository.new 
-    new_album = Album.new
-    new_album.title = params[:title]
-    new_album.release_year = params[:release_year]
-    new_album.artist_id = params[:artist_id]
-
-    repo.create(new_album)
-    return ''
+    artist_repo = ArtistRepository.new
+   
+    @album = repo.find(params[:id])
+    @artist = artist_repo.find(@album.artist_id)
+    return erb(:album)
   end
 
-   get '/artists' do 
+  get '/artists/:id' do 
     repo = ArtistRepository.new 
-    artists = repo.all
-
-    response = artists.map do |artist|
-      artist.name
-    end.join(', ')
-
-    return response
+    @artist = repo.find(params[:id])
+    return erb(:artist)
   end
 
-  post '/artists' do
+  get '/artists' do 
     repo = ArtistRepository.new 
-    new_artist = Artist.new
-    new_artist.name = params[:name]
-    new_artist.genre = params[:genre]
-
-    repo.create(new_artist)
-    return ''
+    @artists = repo.all
+    return erb(:artists)
   end
- 
 end
+  # post '/artists' do
+  #   repo = ArtistRepository.new 
+  #   new_artist = Artist.new
+  #   new_artist.name = params[:name]
+  #   new_artist.genre = params[:genre]
+
+  #   repo.create(new_artist)
+  #   return ''
+  # end
+  # get '/albums' do
+  #   repo = AlbumRepository.new 
+  #   @album = repo.all
+  #   return erb(:record)
+  # end
+
+
+    # get '/' do 
+    #   @password = params[:password]
+    #   return erb(:index)
+    # end
+
+  # get '/' do
+  #   @name = params[:name]
+  #   @cohort_name = 'May 2023'
+  #   return erb(:index)
+  # end
+
+  # get '/'do
+  # @name = ['Ha', 'Alex', 'Kim', 'Dave']
+  # return erb(:index)
+  # end
+ 
+  # post '/albums' do 
+  #   repo = AlbumRepository.new 
+  #   new_album = Album.new
+  #   new_album.title = params[:title]
+  #   new_album.release_year = params[:release_year]
+  #   new_album.artist_id = params[:artist_id]
+
+  #   repo.create(new_album)
+  #   return ''
+  # end
+
+ 
