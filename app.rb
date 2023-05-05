@@ -15,6 +15,11 @@ class Application < Sinatra::Base
   end
 
 
+   get '/' do
+        return 'Hello'
+  end
+
+  
 get '/albums/new' do
   return erb(:new_album)
 end
