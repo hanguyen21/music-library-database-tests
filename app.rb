@@ -14,6 +14,44 @@ class Application < Sinatra::Base
     also_reload 'lib/artist_repository'
   end
 
+#  get '/tasks/new' do
+#    return erb(:new_task)
+#  end
+
+get '/albums/new' do
+  return erb(:new_album)
+end
+
+get '/artists/new' do
+  return erb(:new_artist)
+end
+
+  post '/albums' do
+   @title = params[:title]
+   release_year = params[:release_year]
+   artist_id = params[:artist_id]
+
+   new_album = Album.new
+   new_album.title = @title
+   new_album.release_year = release_year
+   new_album.artist_id = artist_id
+   AlbumRepository.new.create(new_album)
+    return erb(:album_created)
+  end
+
+  post '/artists' do
+    @name = params[:name]
+    genre = params[:genre]
+    
+ 
+    new_artist = Artist.new
+    new_artist.name = @name
+    new_artist.genre = genre
+    ArtistRepository.new.create(new_artist)
+     return erb(:artist_created)
+   end
+
+
   get '/albums' do 
     repo = AlbumRepository.new 
     @albums = repo.all
@@ -42,47 +80,3 @@ class Application < Sinatra::Base
     return erb(:artists)
   end
 end
-  # post '/artists' do
-  #   repo = ArtistRepository.new 
-  #   new_artist = Artist.new
-  #   new_artist.name = params[:name]
-  #   new_artist.genre = params[:genre]
-
-  #   repo.create(new_artist)
-  #   return ''
-  # end
-  # get '/albums' do
-  #   repo = AlbumRepository.new 
-  #   @album = repo.all
-  #   return erb(:record)
-  # end
-
-
-    # get '/' do 
-    #   @password = params[:password]
-    #   return erb(:index)
-    # end
-
-  # get '/' do
-  #   @name = params[:name]
-  #   @cohort_name = 'May 2023'
-  #   return erb(:index)
-  # end
-
-  # get '/'do
-  # @name = ['Ha', 'Alex', 'Kim', 'Dave']
-  # return erb(:index)
-  # end
- 
-  # post '/albums' do 
-  #   repo = AlbumRepository.new 
-  #   new_album = Album.new
-  #   new_album.title = params[:title]
-  #   new_album.release_year = params[:release_year]
-  #   new_album.artist_id = params[:artist_id]
-
-  #   repo.create(new_album)
-  #   return ''
-  # end
-
- 

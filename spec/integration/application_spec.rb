@@ -10,17 +10,62 @@ end
 
 
 describe Application do
-  # This is so we can use rack-test helper methods.
+
   include Rack::Test::Methods
 
-  # We need to declare the `app` value by instantiating the Application
-  # class so our tests work.
+
   let(:app) { Application.new }
 
   before(:each) do 
     reset_artists_table
   end
 
+     context 'GET /albums/new' do 
+       it 'should return the html form to create a new task' do 
+          response = get('albums/new')
+          expect(response.status).to eq(200)
+          expect(response.body).to include('<h1>Add a new album</h1>')
+          expect(response.body).to include('form action="/albums" method="POST">')
+        end
+      end
+
+      context 'GET /artists/new' do 
+        it 'should return a form to create a new artist' do
+          response = get('artists/new')
+          expect(response.status).to eq(200)
+          expect(response.body).to include('<h1>Add a new artist</h1>')
+          expect(response.body).to include('form action="/artists" method="POST">')
+        end
+      end
+
+      context "POST /artists" do
+        it 'returns a success page' do
+          # We're now sending a POST request,
+          # simulating the behaviour that the HTML form would have.
+          response = post(
+            '/artists',
+            name: 'Test',
+            genre: 'Pop',
+          )
+          expect(response.status).to eq(200)
+          expect(response.body).to include('<h1>You saved artist: Test</h1>')
+        end
+      end
+
+      context "POST /albums" do
+        it 'returns a success page' do
+          # We're now sending a POST request,
+          # simulating the behaviour that the HTML form would have.
+          response = post(
+            '/albums',
+            title: 'Test',
+            release_year: '1990',
+            artist_id: '1'
+          )
+          expect(response.status).to eq(200)
+          expect(response.body).to include('<h1>You saved album: Test</h1>')
+        end
+      end
 
     context 'GET /albums' do 
     it "return a list of albums" do
