@@ -14,9 +14,6 @@ class Application < Sinatra::Base
     also_reload 'lib/artist_repository'
   end
 
-#  get '/tasks/new' do
-#    return erb(:new_task)
-#  end
 
 get '/albums/new' do
   return erb(:new_album)
